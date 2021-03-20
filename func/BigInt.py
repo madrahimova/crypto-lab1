@@ -96,11 +96,12 @@ class BigInt(object):
             self.bigint = "".join(['0' for _ in range(lenDiff)]) + self.bigint
 
         for i in reversed(range(len(res))):
-            if self.bigint[i] < other.bigint[i]:
-                self.bigint[i] += 10
-                self.bigint[i - 1] -= 1
-
-            res[i] = str(int(self.bigint[i]) - int(other.bigint[i]))
+            tmp = list(self.bigint)
+            if tmp[i] < other.bigint[i]:
+                tmp[i] = str(int(tmp[i]) + 10)
+                tmp[i - 1] = str(int(tmp[i - 1]) - 1)
+            self.bigint = "".join([str(e) for e in tmp])
+            res[i] = str(int(tmp[i]) - int(other.bigint[i]))
 
         i = 0
         while res[i] == '0' and i < len(res):
@@ -124,13 +125,13 @@ class BigInt(object):
             for j in reversed(range(len(tmp))):
                 tmp[j] = int(tmp[j]) * currDigit + carry
                 if tmp[j] > 9:
-                    carry = int(tmp[j] / 10)
+                    carry = int(tmp[j] // 10)
                     tmp[j] -= carry * 10
                 else:
                     carry = 0
 
             if carry > 0:
-                tmp = str(carry) + str(tmp)
+                tmp = [carry] + tmp
 
             tmp += "".join(['0' for _ in range(len(self.bigint) - i - 1)])
             tmp = "".join([str(e) for e in tmp])
