@@ -19,6 +19,12 @@ class BigInt(object):
             self.bigint = self.bigint[1:]
             self.sign = self.bigint[0] == '-'
 
+    def str(self) -> str:
+        return ('-' if self.sign else "") + self.bigint
+
+    def print(self):
+        print(self.str())
+
     def equals(self, other: BigInt) -> bool:
         return self.bigint == other.bigint
 
@@ -53,6 +59,9 @@ class BigInt(object):
             self.bigint = s[1:]
             self.sign = s[0] == '-'
 
+    def abs(self) -> BigInt:
+        return BigInt(self.bigint)
+
     def add(self, other: BigInt) -> BigInt:
         res = list(self.bigint if len(self.bigint) > len(other.bigint) else other.bigint)
         carry = '0'
@@ -66,13 +75,13 @@ class BigInt(object):
         for i in reversed(range(len(res))):
             res[i] = str(int(carry) + int(self.bigint[i]) + int(other.bigint[i]))
             if i != 0:
-                if len(res[i]) > 1:
+                if int(res[i]) > 9:
                     res[i] = str(int(res[i]) - 10)
                     carry = '1'
                 else:
                     carry = '0'
 
-        if len(res[0]) > 1:
+        if int(res[0]) > 9:
             res[0] = str(int(res[0]) - 10)
             res = '1' + "".join(res)
 
@@ -80,13 +89,17 @@ class BigInt(object):
         if self.sign == other.sign:
             res = ('-' if self.sign else "") + res
         else:
-            if self.greater(other):
-                res = ('-' if self.sign else "") + str(self.sub(other).bigint)
+            if self.abs().greater(other.abs()):
+                res = ('-' if self.sign else "") + str(self.__sub__(other).bigint)
             else:
-                res = ('-' if other.sign else "") + str(other.sub(self).bigint)
+                res = ('-' if other.sign else "") + str(other.__sub__(self).bigint)
         return BigInt(res)
 
-    def sub(self, other: BigInt) -> BigInt:
+    def sub(self, other: BigInt):
+        other.sign = not other.sign
+        return self.add(other)
+
+    def __sub__(self, other: BigInt) -> BigInt:
         res = list(self.bigint if len(self.bigint) > len(other.bigint) else other.bigint)
         lenDiff = abs(len(self.bigint) - len(other.bigint))
 
