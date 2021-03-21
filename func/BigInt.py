@@ -4,20 +4,11 @@
 """
 
 from __future__ import annotations
-
-import random
-import string
-
 import numpy as np
 
 
-def rand(len=10) -> BigInt:
-    bigint = ('-' if random.uniform(0, 1) else "") + "".join(random.choice(string.digits) for _ in range(len))
-    return BigInt(bigint)
-
-
 class BigInt(object):
-    def __init__(self, bigint: str):
+    def __init__(self, igint: str):
         self.MAX = 10000
         self.bigint = bigint
 
@@ -199,6 +190,6 @@ class BigInt(object):
         _, rem = self.divide(den)
         rem.sign = self.sign != other.sign
 
-        if int(rem.bigint) == '0':
+        if rem.bigint == '0':
             rem.sign = False
         return rem

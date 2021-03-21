@@ -58,7 +58,7 @@ def passed(mrc):
 
 def rand():
     while True:
-        p = prime(random.uniform(10, 1000))
+        p = prime(int(random.uniform(10, 1000)))
         if not passed(p):
             continue
         else:
