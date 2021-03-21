@@ -8,7 +8,7 @@ import numpy as np
 
 
 class BigInt(object):
-    def __init__(self, igint: str):
+    def __init__(self, bigint: str):
         self.MAX = 10000
         self.bigint = bigint
 
