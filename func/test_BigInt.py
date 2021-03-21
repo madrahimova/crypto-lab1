@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from func.BigInt import BigInt
 
 
@@ -10,6 +11,10 @@ class TestSmallBigInt(TestCase):
     def test_add(self):
         c = self.a.add(self.b)
         self.assertEqual(c.equals(BigInt(3)), True)
+
+    def test_sub(self):
+        c = self.a.sub(self.b)
+        self.assertEqual(c.equals(BigInt('-1')), True)
 
     def test_mul(self):
         c = self.a.mul(self.b)
@@ -34,6 +39,10 @@ class TestPosBigInt(TestCase):
         c = self.pos_a.add(self.pos_b)
         self.assertEqual(c.equals(BigInt('1245356356356356353635634889')), True)
 
+    def test_sub(self):
+        c = self.pos_a.sub(self.pos_b)
+        self.assertEqual(c.equals(BigInt('1245356356356356353635634887')), True)
+
     def test_mul(self):
         c = self.pos_a.mul(self.pos_b)
         self.assertEqual(c.equals(BigInt('1245356356356356353635634888')), True)
@@ -57,6 +66,10 @@ class TestNegBigInt(TestCase):
         c = self.neg_a.add(self.neg_b)
         self.assertEqual(c.equals(BigInt('-1245356356356356353635634889')), True)
 
+    def test_sub(self):
+        c = self.neg_a.sub(self.neg_b)
+        self.assertEqual(c.equals(BigInt('1245356356356356353635634887')), True)
+
     def test_mul(self):
         c = self.neg_a.mul(self.neg_b)
         self.assertEqual(c.equals(BigInt('1245356356356356353635634888')), True)
@@ -79,6 +92,10 @@ class TestPosNegBigInt(TestCase):
     def test_add(self):
         c = self.pos_a.add(self.neg_b)
         self.assertEqual(c.equals(BigInt('1245356356356356353635634887')), True)
+
+    def test_sub(self):
+        c = self.pos_a.sub(self.neg_b)
+        self.assertEqual(c.equals(BigInt('1245356356356356353635634889')), True)
 
     def test_mul(self):
         c = self.pos_a.mul(self.neg_b)

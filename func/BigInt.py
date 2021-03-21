@@ -4,13 +4,33 @@
 """
 
 from __future__ import annotations
+
+import random
+import string
+
 import numpy as np
+
+
+def rand(len=10) -> BigInt:
+    bigint = ('-' if random.uniform(0, 1) else "") + "".join(random.choice(string.digits) for _ in range(len))
+    return BigInt(bigint)
 
 
 class BigInt(object):
     def __init__(self, bigint: str):
         self.MAX = 10000
         self.bigint = bigint
+
+        if np.char.isdigit(self.bigint[0]):
+            self.bigint = self.bigint
+            self.sign = False
+        else:
+            self.bigint = self.bigint[1:]
+            self.sign = self.bigint[0] == '-'
+
+    def __init__(self, bigint: int):
+        self.MAX = 10000
+        self.bigint = str(bigint)
 
         if np.char.isdigit(self.bigint[0]):
             self.bigint = self.bigint
@@ -93,11 +113,14 @@ class BigInt(object):
                 res = ('-' if self.sign else "") + str(self.__sub__(other).bigint)
             else:
                 res = ('-' if other.sign else "") + str(other.__sub__(self).bigint)
+        if res == '-0':
+            return BigInt(res[1:])
         return BigInt(res)
 
-    def sub(self, other: BigInt):
-        other.sign = not other.sign
-        return self.add(other)
+    def sub(self, other: BigInt) -> BigInt:
+        o = BigInt(other.bigint)
+        o.sign = not other.sign
+        return self.add(o)
 
     def __sub__(self, other: BigInt) -> BigInt:
         res = list(self.bigint if len(self.bigint) > len(other.bigint) else other.bigint)
@@ -113,11 +136,11 @@ class BigInt(object):
             if tmp[i] < other.bigint[i]:
                 tmp[i] = str(int(tmp[i]) + 10)
                 tmp[i - 1] = str(int(tmp[i - 1]) - 1)
-            self.bigint = "".join([str(e) for e in tmp])
-            res[i] = str(int(tmp[i]) - int(other.bigint[i]))
+            self.bigint = tmp
+            res[i] = str(int(self.bigint[i]) - int(other.bigint[i]))
 
         i = 0
-        while res[i] == '0' and i < len(res):
+        while res[i] == '0' and i < len(res) - 1:
             i += 1
         res = "".join([str(e) for e in res[i:]])
         return BigInt(res)
@@ -152,7 +175,7 @@ class BigInt(object):
 
         r = r.bigint
         i = 0
-        while r[i] == '0' and i < len(r):
+        while r[i] == '0' and i < len(r) - 1:
             i += 1
         res = r[i:]
         return BigInt(('-' if self.sign != other.sign else "") + res)
@@ -160,6 +183,9 @@ class BigInt(object):
     def divide(self, den: int) -> (BigInt, BigInt):
         rem = 0
         res = ""
+
+        if den == 0:
+            raise ZeroDivisionError()
 
         for i in range(len(self.bigint)):
             rem = rem * 10 + int(self.bigint[i])
