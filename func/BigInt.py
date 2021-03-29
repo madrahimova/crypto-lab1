@@ -107,9 +107,9 @@ class BigInt(object):
             res = ('-' if self.sign else "") + res
         else:
             if self.abs().greater(other.abs()):
-                res = ('-' if self.sign else "") + str(self.__sub__(other).bigint)
+                res = self.__sub__(other).str()
             else:
-                res = ('-' if other.sign else "") + str(other.__sub__(self).bigint)
+                res = other.__sub__(self).str()
         if res == '-0':
             return BigInt(res[1:])
         return BigInt(res)
