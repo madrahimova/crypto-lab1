@@ -33,11 +33,17 @@ class BigInt(object):
     def str(self) -> str:
         return ('-' if self.sign else "") + self.bigint
 
+    def pow(self, power) -> BigInt:
+        if power > 1:
+            return self.mul(self.pow(power - 1))
+        else:
+            return self
+
     def print(self):
         print(self.str())
 
     def equals(self, other: BigInt) -> bool:
-        return self.bigint == other.bigint
+        return self.bigint == other.bigint and self.sign == other.sign
 
     def less(self, other: BigInt) -> bool:
         if self.sign and not other.sign:
